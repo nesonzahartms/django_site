@@ -1,0 +1,46 @@
+<!-- Lesson "Django Templates" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Books</title>
+    <style>
+    body {
+      background-color: rgba(24, 80, 120, 0.5);
+    }
+    </style>
+</head>
+<body>
+    <h1>Привет! Вот ниже список книг:-)</h1>
+    <div>
+        <p>Books:</p>
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+              <th>Publisher</th>
+          </tr>
+        <tr>
+        {% for book in books %}
+            <td>{{ book.name }}</td>
+            <td>{{ book.price }}</td>
+            <td>{{ book.publisher }}</td>
+        </tr>
+            {% endfor %}
+
+            </table>
+    </div>
+
+<!--    <div>-->
+<!--        -->
+<!--          <tr>-->
+<!--            <td>Alex</td>-->
+<!--            <td>34</td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>Ann</td>-->
+<!--            <td>32</td>-->
+<!--          </tr>-->
+<!--        </table>-->
+<!--    </div>-->
+</body>
+</html>
