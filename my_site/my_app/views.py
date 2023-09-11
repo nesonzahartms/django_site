@@ -397,8 +397,7 @@ def add_user(request: HttpRequest) -> HttpResponse:
     return HttpResponse(f"User: {user}")
 
 
-
-def add_publisher(request):
+def add_publisher(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = PublisherForm(request.POST)
         if form.is_valid():
@@ -415,7 +414,7 @@ def add_publisher(request):
     return render(request, 'publisher_form.html', {'form': form})
 
 
-def add_book(request):
+def add_book(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = BookForm(request.POST)
         if form.is_valid():
