@@ -6,8 +6,9 @@ from django.http import HttpResponse, HttpRequest, HttpResponseNotFound
 from my_app.models import Book, Store, Author, Publisher, User
 from my_app.utils import query_debugger
 from django.db.models import Prefetch, Subquery
-from django.shortcuts import render
-from my_app.forms import UserForm
+from django.shortcuts import render, redirect
+from my_app.forms import UserForm, PublisherForm, BookForm
+
 
 logging.basicConfig(
     format="%(asctime)s.%(msecs)03d %(levelname)s "
@@ -394,3 +395,47 @@ def add_user(request: HttpRequest) -> HttpResponse:
     user = _add_user(user_data)
 
     return HttpResponse(f"User: {user}")
+
+
+# def get_book_form(request: HttpRequest) -> HttpResponse:
+#     form = UserForm()
+#     return render(
+#         request,
+#         "book_forms.html",
+#         context={"form": form})
+
+
+def get_create_publisher(request):
+    if request.method == 'POST':
+        form = PublisherForm(request.POST)
+        if form.is_valid():
+            publisher_name = form.cleaned_data['publisher_name']
+            if Publisher.objects.filter(name=publisher_name).exists():
+                response = f"Publisher with {publisher_name} already exists."
+                return render(request, 'publisher_form.html', {'form': form, 'response': response})
+            else:
+                Publisher.objects.create(name=publisher_name)
+                return redirect('publisher_success')
+    else:
+        form = PublisherForm()
+    return render(request, 'publisher_form.html', {'form': form})
+
+
+def get_create_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST)
+        if form.is_valid():
+            book_name = form.cleaned_data['book_name']
+            book_price = form.cleaned_data['book_price']
+            publisher_name = form.cleaned_data['book_publisher']
+
+
+            publisher = Publisher.objects.filter(name=publisher_name).first()
+            if publisher is None:
+                publisher = Publisher.objects.create(name=publisher_name)
+
+            Book.objects.create(name=book_name, price=book_price, publisher=publisher)
+            return redirect('book_success')
+    else:
+        form = BookForm()
+    return render(request, 'book_forms.html', {'form': form})

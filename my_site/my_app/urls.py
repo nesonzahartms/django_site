@@ -21,5 +21,7 @@ urlpatterns = [
     path('all_books_v2', views.get_all_books_v2),
     path('only_books_with_authors', views.get_only_books_with_authors),
     path('use_form', views.get_use_form),
-    path('user/save', views.add_user)
+    path('user/save', views.add_user),
+    path('create_publisher', views.get_create_publisher),
+    path('create_book', views.get_create_book)
 ]
