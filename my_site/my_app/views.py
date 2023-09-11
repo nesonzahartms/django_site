@@ -397,22 +397,16 @@ def add_user(request: HttpRequest) -> HttpResponse:
     return HttpResponse(f"User: {user}")
 
 
-# def get_book_form(request: HttpRequest) -> HttpResponse:
-#     form = UserForm()
-#     return render(
-#         request,
-#         "book_forms.html",
-#         context={"form": form})
 
-
-def get_create_publisher(request):
+def add_publisher(request):
     if request.method == 'POST':
         form = PublisherForm(request.POST)
         if form.is_valid():
             publisher_name = form.cleaned_data['publisher_name']
             if Publisher.objects.filter(name=publisher_name).exists():
                 response = f"Publisher with {publisher_name} already exists."
-                return render(request, 'publisher_form.html', {'form': form, 'response': response})
+                return render(request, 'publisher_form.html',
+                              {'form': form, 'response': response})
             else:
                 Publisher.objects.create(name=publisher_name)
                 return redirect('publisher_success')
@@ -421,7 +415,7 @@ def get_create_publisher(request):
     return render(request, 'publisher_form.html', {'form': form})
 
 
-def get_create_book(request):
+def add_book(request):
     if request.method == 'POST':
         form = BookForm(request.POST)
         if form.is_valid():
