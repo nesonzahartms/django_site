@@ -1,15 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<form action="/my_app/create_book" method="pass">
+<form action="/my_app/save_book" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="OK">
 </form>
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
 </html>

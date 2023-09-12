@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<form action="/my_app/user/save" method="pass">
+<form action="/my_app/user/save" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="OK">

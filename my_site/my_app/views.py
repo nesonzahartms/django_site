@@ -397,38 +397,87 @@ def add_user(request: HttpRequest) -> HttpResponse:
     return HttpResponse(f"User: {user}")
 
 
+def get_book_form(request: HttpRequest) -> HttpResponse:
+    form = BookForm
+    return render(request, "book_forms.html", context={"form": form})
+
+
+def get_publisher_form(request: HttpRequest) -> HttpResponse:
+    form = PublisherForm
+    return render(request, "publisher_form", context={"form": form})
+
+
+def _add_book_form(book_dict: dict):
+    return Book.objects.create(
+        name=book_dict.get("book_name") or "default name",
+        price=book_dict.get("book_price") or 0,
+        publisher_id=book_dict.get("book_publisher") or 0
+    )
+
+
+def add_book_form(request: HttpRequest) -> HttpResponse:
+    rq_data = request.POST
+    book_data = {
+        "book_name": rq_data.get("book name"),
+        "book_price": rq_data.get("book price"),
+        "book_publisher": rq_data.get("book publisher"),
+    }
+    book = _add_book_form(book_data)
+
+    return HttpResponse(f"book: {book}")
+
+
+
+def _add_publisher(publisher_dict: dict):
+    return Publisher.objects.create(
+        name=publisher_dict.get('publisher_name')
+    )
+
+
 def add_publisher(request: HttpRequest) -> HttpResponse:
-    if request.method == 'POST':
-        form = PublisherForm(request.POST)
-        if form.is_valid():
-            publisher_name = form.cleaned_data['publisher_name']
-            if Publisher.objects.filter(name=publisher_name).exists():
-                response = f"Publisher with {publisher_name} already exists."
-                return render(request, 'publisher_form.html',
-                              {'form': form, 'response': response})
-            else:
-                Publisher.objects.create(name=publisher_name)
-                return redirect('publisher_success')
-    else:
-        form = PublisherForm()
-    return render(request, 'publisher_form.html', {'form': form})
+    rq_data = request.POST
+    publisher_data = {
+        "publisher_name": rq_data.get("publisher_name")
+    }
 
+    if publisher_data.get("publisher_name") in [str(p) for p in Publisher.objects.all()]:
+        return HttpResponse(f"Publisher with name {publisher_data.get('publisher_name')} already exist!")
 
-def add_book(request: HttpRequest) -> HttpResponse:
-    if request.method == 'POST':
-        form = BookForm(request.POST)
-        if form.is_valid():
-            book_name = form.cleaned_data['book_name']
-            book_price = form.cleaned_data['book_price']
-            publisher_name = form.cleaned_data['book_publisher']
+    publisher = _add_publisher(publisher_data)
+    return HttpResponse(f"Publisher: {publisher} created!")
 
-
-            publisher = Publisher.objects.filter(name=publisher_name).first()
-            if publisher is None:
-                publisher = Publisher.objects.create(name=publisher_name)
-
-            Book.objects.create(name=book_name, price=book_price, publisher=publisher)
-            return redirect('book_success')
-    else:
-        form = BookForm()
-    return render(request, 'book_forms.html', {'form': form})
+# def add_publisher(request: HttpRequest) -> HttpResponse:
+#     if request.method == 'POST':
+#         form = PublisherForm(request.POST)
+#         if form.is_valid():
+#             publisher_name = form.cleaned_data['publisher_name']
+#             if Publisher.objects.filter(name=publisher_name).exists():
+#                 response = f"Publisher with {publisher_name} already exists."
+#                 return render(request, 'publisher_form.html',
+#                               {'form': form, 'response': response})
+#             else:
+#                 Publisher.objects.create(name=publisher_name)
+#                 return render('publisher_success')
+#     else:
+#         form = PublisherForm()
+#     return render(request, 'publisher_form.html', {'form': form})
+#
+#
+# def add_book(request: HttpRequest) -> HttpResponse:
+#     if request.method == 'POST':
+#         form = BookForm(request.POST)
+#         if form.is_valid():
+#             book_name = form.cleaned_data['book_name']
+#             book_price = form.cleaned_data['book_price']
+#             publisher_name = form.cleaned_data['book_publisher']
+#
+#
+#             publisher = Publisher.objects.filter(name=publisher_name).first()
+#             if publisher is None:
+#                 publisher = Publisher.objects.create(name=publisher_name)
+#
+#             Book.objects.create(name=book_name, price=book_price, publisher=publisher)
+#             return render('book_success')
+#     else:
+#         form = BookForm()
+#     return render(request, 'book_forms.html', {'form': form})
