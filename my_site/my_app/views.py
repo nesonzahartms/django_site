@@ -440,7 +440,7 @@ def add_publisher(request: HttpRequest) -> HttpResponse:
         "publisher_name": rq_data.get("publisher_name")
     }
 
-    if publisher_data.get("publisher_name") in [str(p) for p in Publisher.objects.all()]:
+    if Publisher.objects.filter(name=publisher_data.get("publisher_name")):
         return HttpResponse(f"Publisher with name {publisher_data.get('publisher_name')} already exist!")
 
     publisher = _add_publisher(publisher_data)
