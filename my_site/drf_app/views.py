@@ -106,22 +106,56 @@ def publisher_by_id(request, publisher_id: int) -> Response:
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-def get_book_by_id(book_id):
-    response = requests.get(f'http://127.0.0.1:8000/drf_app/book_by_id/{book_id}/')
+def get_book_by_id(request, book_id: int) -> Response:
+    book = Book.objects.filter(id=book_id).first()
+    match request.method:
+        case 'GET':
+            if not book:
+                return Response(
+                    f"Book with id {book_id} not found!",
+                    status=status.HTTP_404_NOT_FOUND
+                )
 
-    if response.status_code == 200:
-        return response.json()
-    elif response.status_code == 404:
-        return {'error': 'Book not found'}
-    else:
-        return {'error': 'An error occurred'}
+            serializer = BookSerializer(book)
+            return Response(serializer.data)
+
+        case 'POST':
+            if book:
+                return Response(
+                    f"Book with ID {book_id} already exists!",
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            serializer = BookSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    f"Book created: id = {Book}, data = {request.data}",
+                )
+
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 
-def create_book(book_data):
-    response = requests.post('http://127.0.0.1:8000/drf_app/book_create/', json=book_data)
-    if response.status_code == 201:
-        return response.json()
-    elif response.status_code == 403:
-        return {'error': 'Book already exists'}
-    else:
-        return {'error': 'An error occurred'}
+
+
+#                 (book_id):
+#     response = requests.get(f'http://127.0.0.1:8000/drf_app/book_by_id/{book_id}/')
+#
+#     if response.status_code == 200:
+#         return response.json()
+#     elif response.status_code == 404:
+#         return {'error': 'Book not found'}
+#     else:
+#         return {'error': 'An error occurred'}
+#
+#
+# def create_book(book_data):
+#     response = requests.post('http://127.0.0.1:8000/drf_app/book_create/', json=book_data)
+#     if response.status_code == 201:
+#         return response.json()
+#     elif response.status_code == 403:
+#         return {'error': 'Book already exists'}
+#     else:
+#         return {'error': 'An error occurred'}
