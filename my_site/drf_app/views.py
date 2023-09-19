@@ -106,6 +106,7 @@ def publisher_by_id(request, publisher_id: int) -> Response:
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+
 def get_book_by_id(request, book_id: int) -> Response:
     book = Book.objects.filter(id=book_id).first()
     match request.method:

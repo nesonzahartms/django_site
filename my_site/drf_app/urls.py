@@ -19,8 +19,8 @@ urlpatterns = [
     # Lesson Django REST framework: part 2
     path('publishers/', views.publishers_list),
     path('publishers/<int:publisher_id>', views.publisher_by_id),
-    path('book_by_id/', views.get_book_by_id),
-    path('book_create/', views.create_book)
+    path('book_by_id/<int:book_id>', views.get_book_by_id),
+    # path('book_create/', views.create_book)
 ]
 
 urlpatterns += router.urls
