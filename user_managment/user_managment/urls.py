@@ -1,5 +1,5 @@
 """
-URL configuration for my_site project.
+URL configuration for user_managment project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -15,17 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('my_app/', include('my_app.urls')),
-    path('api-auth/', include('rest_framework.urls')),
-    path('drf_app/', include('drf_app.urls')),
-    path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.authtoken'))
+    path("admin/", admin.site.urls),
+    path('users/', include('users.urls')),
+    path('users/', include('users.apps')),
 ]
-
-# Lesson Django REST

@@ -105,7 +105,7 @@ class BookSerializer(serializers.ModelSerializer):
             else:
                 raise serializers.ValidationError("Error creating author")
 
-        book = Book.objects.create(publisher=publisher, **validated_data)
+        book = Book.objects.create(publisher=publisher_data, **validated_data)
         book.authors.set(authors)
         return book
 

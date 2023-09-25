@@ -5,8 +5,8 @@
 #     first_name = models.CharField(max_length=255)
 #     last_name = models.CharField(max_length=255)
 # # Create your models here.
-
-
+from django.contrib.auth.models import BaseUserManager
+from django.core.mail import send_mail
 from django.db import models
 
 
@@ -38,8 +38,8 @@ class Like(models.Model):
     post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
 
 
+from my_app.models import User
 
-from my_app.models import User, Post, Comment, Like
 
 # user = User.objects.create(id=1, name='...', age=20, gender='male')  # return created User instance
 #
@@ -52,7 +52,6 @@ from my_app.models import User, Post, Comment, Like
 # first_post = Post.objects.get(id=1)  # get Post object by specified id
 #
 # posts = Post.objects.filter(id=1)  # returns QuerySet object with only one Post object inside
-
 
 
 class Publisher(models.Model):
@@ -69,6 +68,7 @@ class Author(models.Model):
 
     def __str__(self):
         return f'se'
+
 
 class Book(models.Model):
     name = models.CharField(max_length=300)
@@ -94,3 +94,15 @@ class Store(models.Model):
         return self.name
 
 
+class UserManager(BaseUserManager):
+    def create_user(self, username, email, password=None, *args, **kwargs):
+        response = super().create_user(username, email, password, *args, **kwargs)
+        send_mail(subject="Account active",
+                  message="Your account is active",
+                  from_email="nesonzahar@gmail.com",
+                  recipient_list=[email])
+        return response
+
+
+class CustomUser(User):
+    objects = UserManager()
