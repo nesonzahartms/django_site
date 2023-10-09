@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_app',
     'djoser',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'my_site.urls'
@@ -90,6 +92,24 @@ DATABASES = {
         'PASSWORD': '123456789',
         'HOST': '127.0.0.1',
         'PORT': '5432',
+    }
+}
+
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+#         "LOCATION": "unique-snowflake",
+#     }
+# }
+
+
+# PyMemCached
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+        "LOCATION": "127.0.0.1:11211",
+        # "TIMEOUT": 60,
+        # "OPTIONS": {"MAX_ENTRIES": 10},
     }
 }
 
@@ -144,3 +164,10 @@ REST_FRAMEWORK = {
 
 DEFAULT_FROM_EMAIL = 'nesonzahar@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+INTERNAL_IPS = ["127.0.0.1"]
+
+# lesson CELERY
+
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']  # Ignore other content
+CELERY_RESULT_SERIALIZER = 'json'

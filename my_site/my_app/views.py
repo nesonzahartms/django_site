@@ -2,13 +2,14 @@ import logging
 import sys
 import result
 
+from cachetools import TTLCache, cached
 from django.http import HttpResponse, HttpRequest, HttpResponseNotFound
 from my_app.models import Book, Store, Author, Publisher, User
 from my_app.utils import query_debugger
 from django.db.models import Prefetch, Subquery
 from django.shortcuts import render, redirect
 from my_app.forms import UserForm, PublisherForm, BookForm
-
+from django.views.decorators.cache import cache_page
 
 logging.basicConfig(
     format="%(asctime)s.%(msecs)03d %(levelname)s "
@@ -21,6 +22,7 @@ logger = logging.getLogger(__name__)
 django_logger = logging.getLogger('django.db.backends')
 django_logger.setLevel(logging.DEBUG)
 django_logger.addHandler(logging.StreamHandler())
+
 
 # ---------- Lesson DJANGO ORM 3: SELECT RELATED / PREFETCH RELATED ----------- #
 
@@ -188,12 +190,15 @@ def get_publishers_with_expensive_books(request: HttpRequest) -> HttpResponse:
 
 # ---------- Lesson DJANGO VIEWS ----------- #
 
+
+# Python cache
+
+@cached(cache=TTLCache(ttl=32, maxsize=12))
 def get_book_by_id(request: HttpRequest, book_id: int) -> HttpResponse:
     if not (book := Book.objects.filter(id=book_id).first()):
         return HttpResponseNotFound(
             f'<h2>Book by id {book_id} not found</h2>'
         )
-
     authors = book.authors.all()
     authors = "<h2><p>".join([str(a) for a in authors])
     logger.debug(authors)
@@ -216,8 +221,9 @@ def get_book_by_id(request: HttpRequest, book_id: int) -> HttpResponse:
     return HttpResponse(
         f"<h1>Found book: {book}, authors: <h2><p>{authors}</h1>"
     )
-def _get_authors_with_expensive_books():
 
+
+def _get_authors_with_expensive_books():
     queryset = Author.objects.prefetch_related(
         Prefetch(
             'books',
@@ -233,6 +239,8 @@ def _get_authors_with_expensive_books():
                         'books': books})
 
     return authors
+
+
 def get_expensive_books(request: HttpRequest) -> HttpResponse:
     expensive_books = Book.objects.filter(price__gte=250)
     expensive_books = "<h3><p>".join([str(a) for a in expensive_books])
@@ -249,6 +257,7 @@ def get_authors_with_expensive_books(request: HttpRequest) -> HttpResponse:
     authors_list = _get_authors_with_expensive_books()
     authors_list = "<h3><p>".join([str(a) for a in authors_list])
     return HttpResponse(f"Authors with expensive books:\n {authors_list}")
+
 
 @query_debugger(logger)
 def _get_publisher_by_id(publisher_id: int):
@@ -326,6 +335,10 @@ def get_first_three_books(request: HttpRequest) -> HttpResponse:
     )
 
 
+# Python cache
+
+
+# @cache_page(180)
 def get_all_books_v2(request: HttpRequest) -> HttpResponse:
     """
     Lesson "Django Templates"
@@ -425,7 +438,6 @@ def add_book_form(request: HttpRequest) -> HttpResponse:
     book = _add_book_form(book_data)
 
     return HttpResponse(f"book: {book}")
-
 
 
 def _add_publisher(publisher_dict: dict):
