@@ -34,7 +34,7 @@ def test_numb_type_error(number):
 
 def valid_string(string):
     pattern = r'^[a-zA-Z0-9]+$'
-    return bool(re.match(pattern, string))
+    return bool(re.fullmatch(pattern, string))
 
 
 @pytest.mark.parametrize('string, expected', [
