@@ -4,7 +4,7 @@ import re
 
 def numb(number):
     if not isinstance(number, int):
-        raise TypeError("Введите целое число")
+        raise TypeError('Введите целое число')
     return number % 2 == 0
 
 
