@@ -4,7 +4,7 @@ import re
 
 def numb(number):
     if not isinstance(number, int):
-        raise TypeError
+        raise TypeError('NaN')
     return number % 2 == 0
 
 
