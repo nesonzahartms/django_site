@@ -8,7 +8,7 @@ def numb(number):
     return number % 2 == 0
 
 
-@pytest.mark.parametrize('number, expected_result', [
+@pytest.mark.parametrize('number, expected', [
     (2, True),
     (0, True),
     (-2, True),
@@ -17,8 +17,8 @@ def numb(number):
     (3, False),
     (4, True)
 ])
-def test_numb(number, expected_result):
-    assert numb(number) == expected_result
+def test_numb(number, expected):
+    assert numb(number) == expected
 
 
 @pytest.mark.parametrize('number', [
@@ -37,7 +37,7 @@ def valid_string(string):
     return bool(re.match(pattern, string))
 
 
-@pytest.mark.parametrize('string, expected_result', [
+@pytest.mark.parametrize('string, expected', [
     ('Test123', True),
     ('test', True),
     ('123', True),
@@ -45,5 +45,5 @@ def valid_string(string):
     ('test-', False),
     ('', False)
 ])
-def test_valid_string(string, expected_result):
-    assert valid_string(string) == expected_result
+def test_valid_string(string, expected):
+    assert valid_string(string) == expected
