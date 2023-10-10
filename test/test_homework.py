@@ -11,11 +11,11 @@ def numb(number):
 @pytest.mark.parametrize('number, expected', [
     (2, True),
     (0, True),
-    (-2, True),
+    (4, True),
     (1, False),
-    (-1, False),
+    (5, False),
     (3, False),
-    (4, True)
+    (10, True)
 ])
 def test_numb(number, expected):
     assert numb(number) == expected
