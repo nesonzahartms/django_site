@@ -1,3 +1,6 @@
+'password_apps mqbv swky mrhl dlyf'
+
+
 django
 djangorestframework
 requests

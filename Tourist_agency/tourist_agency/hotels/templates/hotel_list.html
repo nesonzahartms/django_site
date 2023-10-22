@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Hotel List</h2>
+    <ul>
+        {% for hotel in hotels %}
+            <li>
+                <h3>{{ hotel.name }}</h3>
+                <p>Country: {{ hotel.country }}</p>
+                <p>Category: {{ hotel.category }}</p>
+                <p>: {{ hotel.category }}</p>
+                <!-- Добавьте другие поля отеля, например, изображения и отзывы -->
+                <a href="{% url 'hotel_detail' hotel.id %}">View Details</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+</html>

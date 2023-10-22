@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Hotel Details</h2>
+    <h3>{{ hotel.name }}</h3>
+    <p>Country: {{ hotel.country }}</p>
+    <p>Category: {{ hotel.category }}</p>
+    <!-- Добавьте другие поля отеля, например, изображения и отзывы -->
+{% endblock %}
+</html>

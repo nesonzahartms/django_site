@@ -1,5 +1,7 @@
 import logging
 import sys
+from datetime import time
+
 import result
 
 from cachetools import TTLCache, cached
@@ -45,7 +47,9 @@ def _get_all_books():
 
     return [
         {
-            'id': book.id, 'name': book.name,
+            'id': book.id,
+            'name': book.name,
+            'price': book.price,
             # here the additional SQL query is executed to get a publisher name
             'publisher': book.publisher.name,
         }
@@ -458,6 +462,7 @@ def add_publisher(request: HttpRequest) -> HttpResponse:
     publisher = _add_publisher(publisher_data)
     return HttpResponse(f"Publisher: {publisher} created!")
 
+
 # def add_publisher(request: HttpRequest) -> HttpResponse:
 #     if request.method == 'POST':
 #         form = PublisherForm(request.POST)
@@ -493,3 +498,36 @@ def add_publisher(request: HttpRequest) -> HttpResponse:
 #     else:
 #         form = BookForm()
 #     return render(request, 'book_forms.html', {'form': form})
+
+
+from my_site.celery_tasks import calculate
+import operator
+
+
+def get_books_by_price(request: HttpRequest, price_in_cents: int) -> HttpResponse:
+    """
+    Lesson "Celery py.2"
+    """
+    price = calculate.s(price_in_cents, 100, operator.truediv.__qualname__).delay()
+    books = _get_all_books()
+    price_val = price.get()
+
+    books = [b for b in books if b['price'] > price_val]
+
+    return render(request, "books3.html", context={"books": books})
+
+from celery import group
+
+
+def check_group_execution_time(request, tasks_count):
+    logger.debug(f"Tasks count: {tasks_count}")
+    my_range = range(1, tasks_count + 1)
+
+    t0 = time.perf_counter()
+    # v1
+    # result = group(calculate.s(i, i, operator.add.__qualname__) for i in my_range)().get()
+    # v2
+    result = group(calculate.s(tasks_count, i, operator.add.__qualname__) for i in my_range)().get()
+    t1 = time.perf_counter() - t0
+
+    return HttpResponse(f"Result: {result}, exec time: {t1} seconds")

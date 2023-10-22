@@ -26,4 +26,6 @@ urlpatterns = [
     path('create_book', views.get_book_form),
     path('save_book', views.add_book_form),
     path('save_publisher', views.add_publisher),
+    path('books_by_center_price', views.get_books_by_price),
+    path('celery_group_tasks_check/<int:tasks_count>', views.check_group_execution_time),
 ]
