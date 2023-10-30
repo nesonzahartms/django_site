@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.views import View
 
+
 class LoginView(View):
     def get(self, request):
         return render(request, 'auth/login.html')
@@ -15,6 +16,7 @@ class LoginView(View):
             return redirect('home')
         else:
             return render(request, 'auth/login.html', {'error': 'Invalid username or password'})
+
 
 class LogoutView(View):
     def get(self, request):

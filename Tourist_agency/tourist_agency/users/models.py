@@ -1,7 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 class User(AbstractUser):
-    # Добавьте дополнительные поля, если необходимо
+    USER_TYPE_CHOICES = (
+        (1, 'CUSTOMER'),
+        (2, 'AGENT'),
+        (3, 'SUPERVISOR'),
+    )
+    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
     pass
-# Create your models here.

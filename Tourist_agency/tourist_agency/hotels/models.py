@@ -1,12 +1,10 @@
 from django.db import models
-from django.db import models
 
 
 class Hotel(models.Model):
     name = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     category = models.CharField(max_length=50)
-    # Добавьте другие поля и опции для отелей
 
 
 class HotelImage(models.Model):
@@ -22,7 +20,6 @@ class User(models.Model):
 
 class HotelReview(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='reviews')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment = models.TextField()
     rating = models.IntegerField()
 
