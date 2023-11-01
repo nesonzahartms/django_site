@@ -6,7 +6,6 @@ class User(AbstractUser):
     USER_TYPE_CHOICES = (
         (1, 'CUSTOMER'),
         (2, 'AGENT'),
-        (3, 'SUPERVISOR'),
     )
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
     pass
