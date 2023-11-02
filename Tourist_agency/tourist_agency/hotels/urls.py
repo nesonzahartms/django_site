@@ -1,8 +1,6 @@
-from django.urls import path
 from . import views
 from django.urls import path
-from .views import hotel_search, create_review, hotel_gallery
-from .views import agency_login, agency_registration
+from .views import hotel_search, create_review, hotel_gallery, agency_login, agency_registration
 
 urlpatterns = [
     path('hotels/', views.HotelListView.as_view(), name='hotel_list'),

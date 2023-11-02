@@ -1,7 +1,6 @@
 from django import forms
-from .models import Review
+from .models import Review, AgencyUser
 from django.contrib.auth.forms import AuthenticationForm
-from .models import AgencyUser
 from django.contrib.auth.forms import UserCreationForm
 
 

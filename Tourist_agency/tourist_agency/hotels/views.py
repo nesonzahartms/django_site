@@ -1,23 +1,11 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
-from .models import Hotel
-from django.shortcuts import render
-from .models import Hotel, HotelImage
-
-from django.shortcuts import render
-from .forms import HotelSearchForm
-from .models import Hotel
 from django.shortcuts import render, redirect
-from .forms import ReviewForm
-from django.shortcuts import render, redirect
-from .forms import ReviewForm
-from .models import Agency
-from django.shortcuts import render, redirect
+from .models import Hotel, HotelImage, Agency
+from .forms import HotelSearchForm, ReviewForm, AgencyLoginForm, AgencyRegistrationForm
 from django.contrib.auth import login
-from .forms import AgencyLoginForm, AgencyRegistrationForm
+from django.views.generic import ListView, DetailView
 
 
-def hotel_search(request):# Обработка запроса поиска отелей
+def hotel_search(request):  # Обработка запроса поиска отелей
     form = HotelSearchForm(request.GET)
     hotels = Hotel.objects.all()
 
@@ -36,16 +24,14 @@ def hotel_search(request):# Обработка запроса поиска от�
     return render(request, 'hotel_search.html', {'form': form, 'hotels': hotels})
 
 
-
-def hotel_gallery(request, hotel_id):# Обработка запроса изображений отеля
+def hotel_gallery(request, hotel_id):  # Обработка запроса изображений отеля
     hotel = Hotel.objects.get(id=hotel_id)
     images = HotelImage.objects.filter(hotel=hotel)
 
     return render(request, 'hotel_gallery.html', {'hotel': hotel, 'images': images})
 
 
-
-def create_review(request, agency_id):# Обработка запроса отзывов
+def create_review(request, agency_id):  # Обработка запроса отзывов
     agency = Agency.objects.get(id=agency_id)
 
     if request.method == 'POST':
@@ -62,7 +48,7 @@ def create_review(request, agency_id):# Обработка запроса отз
     return render(request, 'create_review.html', {'form': form, 'agency': agency})
 
 
-def agency_login(request):# Представление для входа
+def agency_login(request):  # Представление для входа
     if request.method == 'POST':
         form = AgencyLoginForm(request, data=request.POST)
         if form.is_valid():
@@ -75,7 +61,7 @@ def agency_login(request):# Представление для входа
     return render(request, 'agency_login.html', {'form': form})
 
 
-def agency_registration(request):# Представление для регистрации
+def agency_registration(request):  # Представление для регистрации
     if request.method == 'POST':
         form = AgencyRegistrationForm(request.POST)
         if form.is_valid():
@@ -86,8 +72,6 @@ def agency_registration(request):# Представление для регис�
         form = AgencyRegistrationForm()
 
     return render(request, 'agency_registration.html', {'form': form})
-
-
 
 # class HotelListView(ListView):
 #     model = Hotel
