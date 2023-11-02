@@ -1,8 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.views import View
 
-from booking.models import Reservation
+from Tourist_agency.booking.models import Reservation
 
 
 @login_required

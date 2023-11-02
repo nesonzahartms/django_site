@@ -45,8 +45,8 @@ INSTALLED_APPS = [
     'tourist_agency',
     'django.contrib.postgres',
 ]
-
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.AgencyUser'
+# AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

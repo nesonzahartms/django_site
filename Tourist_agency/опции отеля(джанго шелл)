@@ -1,0 +1,11 @@
+Создание опций
+option1 = Option.objects.create(name='Swimming Pool')
+option2 = Option.objects.create(name='Gym')
+option3 = Option.objects.create(name='Restaurant')
+
+Создание отеля с опциями
+hotel1 = Hotel.objects.create(name='Hotel A', country='Country A', category=4)
+hotel1.options.add(option1, option2)  # Добавление опций к отелю
+
+hotel2 = Hotel.objects.create(name='Hotel B', country='Country B', category=3)
+hotel2.options.add(option2, option3)

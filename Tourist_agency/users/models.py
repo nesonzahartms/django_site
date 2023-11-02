@@ -9,3 +9,7 @@ class User(AbstractUser):
     )
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
     pass
+
+
+class AgencyUser(AbstractUser):
+    pass
